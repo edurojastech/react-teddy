@@ -1,0 +1,9 @@
+.bg-orange {
+  background-color: #EC6724;
+  color: #fff;
+}
+
+.bg-orange:hover {
+  color: #EC6724 !important;
+  background-color: #dbdada;
+}
