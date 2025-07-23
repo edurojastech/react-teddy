@@ -7,3 +7,7 @@
   color: #EC6724 !important;
   background-color: #dbdada;
 }
+
+#card-intro {
+  border: 1px solid #EC6724  !important;
+}

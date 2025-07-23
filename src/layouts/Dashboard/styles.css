@@ -1,0 +1,30 @@
+.shandow {
+  box-shadow: 0px 2px 2px 0px #0000001A;
+}
+
+#navBarMain {
+  width: 100%; 
+  padding: 20px 80px;
+}
+
+.nav-link {
+  color: #000;
+}
+
+.nav-link:hover {
+  color: #EC6724;
+}
+
+.linkActive {
+  color: #EC6724;
+}
+
+@media(max-width: 640px){
+  #links {
+    display: none !important;
+  }
+
+  #navBarMain {
+    padding: 8px;
+  }
+}
