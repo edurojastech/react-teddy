@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import "./style.css"
 
@@ -6,7 +7,7 @@ interface CardInfoProps {
   salario: number;
   empresa: number;
   onAdd: () => void;
-  onEdit: () => void;
+  onEdit: any;
   onDelete: () => void;
 }
 
