@@ -4,6 +4,19 @@
   gap: 16px;
 }
 
+.btn-outline-primary {
+  border: 1px solid #EC6724 !important;
+  color: #EC6724;
+  font-weight: bold;
+}
+
+.btn-outline-primary:hover {
+  background-color: #EC6724;
+  font-weight: bold;
+  color: #fff;
+}
+
+
 @media(max-width: 640px)  {
   .grid {
     grid-template-columns: repeat(2, 1fr);
