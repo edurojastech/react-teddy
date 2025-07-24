@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import type { Cliente } from "../types/Cliente";
+
 const UrlAPI = "https://boasorte.teddybackoffice.com.br"
 
-export async function postClient (data:string) {
+export async function postClient (data: Cliente) {
   const response = await fetch(`${UrlAPI}/users`, {
     method: "POST",
     headers: {

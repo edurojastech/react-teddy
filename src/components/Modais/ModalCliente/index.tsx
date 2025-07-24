@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import type { ModalClienteProps } from '../../../types/Cliente';
 import { formatarParaReal, limparNumero } from '../../../utils/moneyFormat';
 import formatarParaMoedaReal from '../../../utils/formatarValorReal';
+import removerFormatacaoMoeda from '../../../utils/removerFormatacaoMoeda';
 
 const ModalCliente: React.FC<ModalClienteProps> = ({
   show,
@@ -11,9 +12,9 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
   onSubmit,
   clienteEditando = null,
 }) => {
-  const [nome, setNome] = useState('');
-  const [salario, setSalario] = useState('');
-  const [valorEmpresa, setValorEmpresa] = useState('');
+  const [name, setNome] = useState('');
+  const [salary, setSalario] = useState('');
+  const [companyValuation, setValorEmpresa] = useState('');
 
   const MoneyChange = (e: React.ChangeEvent<HTMLInputElement>, typeSalario:boolean) => {
     const valorDigitado = e.target.value;
@@ -23,9 +24,9 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
 
   useEffect(() => {
     if (clienteEditando) {
-      setNome(clienteEditando.nome);
-      setSalario(formatarParaMoedaReal(clienteEditando.salario))
-      setValorEmpresa(formatarParaMoedaReal(clienteEditando.valorEmpresa))
+      setNome(clienteEditando.name);
+      setSalario(formatarParaMoedaReal(clienteEditando.salary))
+      setValorEmpresa(formatarParaMoedaReal(clienteEditando.companyValuation))
     } else {
       setNome('');
       setSalario('');
@@ -34,13 +35,14 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
   }, [clienteEditando, show]);
 
   const handleSubmit = (e: React.FormEvent) => {
+    const valorEmpresa = removerFormatacaoMoeda(companyValuation)
+    const valorSalario = removerFormatacaoMoeda(salary)
     e.preventDefault();
-    onSubmit({ nome, salario, valorEmpresa });
+    onSubmit({ name, salary: valorSalario, companyValuation: valorEmpresa });
     onClose();
   };
 
   if (!show) return null;
-
   const modoEdicao = clienteEditando !== null;
 
   return (
@@ -61,35 +63,35 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
 
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
-              <label htmlFor="nome">Nome:</label>
+              <label htmlFor="name">Nome:</label>
               <input
-                name='nome'
+                name='name'
                 type="text"
                 className="form-control mb-3"
                 placeholder="Digite o nome:"
-                value={nome}
+                value={name}
                 onChange={(e) => setNome(e.target.value)}
                 required
               />
 
-              <label htmlFor="salario">Salário:</label>
+              <label htmlFor="salary">Salário:</label>
               <input
-                name='salario'
+                name='salary'
                 type="text"
                 className="form-control mb-3"
                 placeholder="Digite o salário:"
-                 value={salario}
+                value={salary}
                 onChange={(e) => MoneyChange(e, true)}
                 required
               />
 
-              <label htmlFor="">Valor da empresa:</label>
+              <label htmlFor="companyValuation">Valor da empresa:</label>
               <input
-                name='valorEmpresa'
+                name='companyValuation'
                 type="text"
                 className="form-control"
                 placeholder="Digite o valor da empresa:"
-                value={valorEmpresa}
+                value={companyValuation}
                 onChange={(e) => MoneyChange(e, false)}
                 required
               />

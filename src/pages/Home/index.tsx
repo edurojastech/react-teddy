@@ -4,20 +4,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type Cliente } from "../../types/Cliente";
-import { getClients } from "../../API/fetch";
+import { getClients, postClient } from "../../API/fetch";
 import { limparNumero } from "../../utils/moneyFormat";
 import Card from "../../components/Card";
 import ModalCliente from "../../components/Modais/ModalCliente";
 import Dashboard from "../../layouts/Dashboard";
 import "./styles.css";
 
-
-
 export default function Home() {
   const [userName, setUserName] = useState(localStorage.getItem("UserName"));
   const navigate = useNavigate();
 
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [cliente, setCliente] = useState<Cliente[]>([]);
   const [clientesList, setClientesList] = useState([])
   const [mostrarModal, setMostrarModal] = useState(false);
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null);
@@ -40,22 +38,34 @@ export default function Home() {
 
   const handleDelete = () => alert('Excluir clicado!');
 
-  const handleSubmit = (novoCliente: Cliente) => {
+  const handleSubmit =  async (novoCliente: Cliente) => {
     if (clienteEditando) {
-      setClientes((prev) =>
+      setCliente((prev) =>
         prev.map((c) =>
           c === clienteEditando ? novoCliente : c
         )
       );
     } else {
-      setClientes((prev) => [...prev, novoCliente]);
+      setCliente((prev) => [...prev, novoCliente]);
+      console.log(novoCliente)
+      await postClient(novoCliente).then((resp) => {
+        if(resp) {
+          alert('Cliente cadastrado com Sucesso!')
+          setMostrarModal(false)
+          listarClientes()
+        }
+      })
     }
     setClienteEditando(null);
   };
 
+  const listarClientes = () => {
+    getClients(1, 40).then(resp => setClientesList(resp.clients))
+  }
+
   useEffect(() => {
     userName == null && navigate("/");
-    getClients(1, 20).then(resp => setClientesList(resp.clients))
+    listarClientes()
   }, [userName]);
 
   return (
@@ -75,9 +85,9 @@ export default function Home() {
                   empresa={companyValuation}
                   onAdd={handleAdd}
                   onEdit={() => abrirEdicao({
-                    nome: name,
-                    salario: limparNumero(`${salary}`),
-                    valorEmpresa:  limparNumero(`${companyValuation}`)
+                    name: name,
+                    salary: limparNumero(`${salary}`),
+                    companyValuation:  limparNumero(`${companyValuation}`)
                   })}
                   onDelete={handleDelete}
                 />
