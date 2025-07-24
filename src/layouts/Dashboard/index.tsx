@@ -1,14 +1,8 @@
+/* eslint-disable prefer-const */
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TeddyLogo from "../../assets/teddy-logo.svg"
 import "./styles.css"
-
-const menuItems = [
-  { icon: "bi-house", label: "Home" },
-  { icon: "bi-person", label: "Perfil" },
-  { icon: "bi-gear", label: "Configurações" },
-  { icon: "bi-info-circle", label: "Sobre" },
-];
 
 const Dashboard: React.FC = ({ children, nameUser }) => {
   let currentPath = location.pathname

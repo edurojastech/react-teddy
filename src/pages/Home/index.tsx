@@ -3,11 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { type Cliente } from "../../types/Cliente";
+import { type Cliente, type ClienteRemove } from "../../types/Cliente";
 import { getClients, postClient } from "../../API/fetch";
 import { limparNumero } from "../../utils/moneyFormat";
 import Card from "../../components/Card";
 import ModalCliente from "../../components/Modais/ModalCliente";
+import ModalDelete from "../../components/Modais/ModalDelete";
 import Dashboard from "../../layouts/Dashboard";
 import "./styles.css";
 
@@ -18,7 +19,9 @@ export default function Home() {
   const [cliente, setCliente] = useState<Cliente[]>([]);
   const [clientesList, setClientesList] = useState([])
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null);
+  const [clienteRemove, setClienteRemove] = useState<ClienteRemove | null>(null);
 
   const abrirCadastro = () => {
     setClienteEditando(null);
@@ -32,11 +35,11 @@ export default function Home() {
     return
   };
 
+  const abrirDelete = (cliente: ClienteRemove) => {
+    setClienteRemove(cliente)
+  }
+
   const handleAdd = () => alert('Adicionar clicado!')
-
-  const handleEdit = () => { alert('Editar clicado!') }
-
-  const handleDelete = () => alert('Excluir clicado!');
 
   const handleSubmit =  async (novoCliente: Cliente) => {
     if (clienteEditando) {
@@ -47,7 +50,6 @@ export default function Home() {
       );
     } else {
       setCliente((prev) => [...prev, novoCliente]);
-      console.log(novoCliente)
       await postClient(novoCliente).then((resp) => {
         if(resp) {
           alert('Cliente cadastrado com Sucesso!')
@@ -76,7 +78,7 @@ export default function Home() {
         </div>
         <div className="container grid">
           {
-            clientesList?.map(({ name, salary, companyValuation}, key) => {
+            clientesList?.map(({ name, salary, companyValuation, id}, key) => {
               return (
                 <Card
                   key={key}
@@ -87,9 +89,16 @@ export default function Home() {
                   onEdit={() => abrirEdicao({
                     name: name,
                     salary: limparNumero(`${salary}`),
-                    companyValuation:  limparNumero(`${companyValuation}`)
+                    companyValuation:  limparNumero(`${companyValuation}`),
+                    id: id
                   })}
-                  onDelete={handleDelete}
+                  onDelete={()=> {
+                    setMostrarModalDelete(true)
+                    abrirDelete({
+                      name: name,
+                      id: id,
+                    })
+                  }}
                 />
               )
             })
@@ -107,6 +116,13 @@ export default function Home() {
           onClose={() => setMostrarModal(false)}
           onSubmit={handleSubmit}
           clienteEditando={clienteEditando}
+        />
+
+        <ModalDelete
+          onClose={() => setMostrarModalDelete(false)}          
+          show={mostrarModalDelete}
+          clienteRemover={clienteRemove}
+          // onDelete={}
         />
       </Dashboard>
     </main>
