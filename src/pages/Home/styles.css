@@ -10,8 +10,8 @@
   font-weight: bold;
 }
 
-.btn-outline-primary:hover {
-  background-color: #EC6724;
+.btn-outline-primary:hover, .btn-outline-primary:active {
+  background-color: #EC6724 !important;
   font-weight: bold;
   color: #fff;
 }

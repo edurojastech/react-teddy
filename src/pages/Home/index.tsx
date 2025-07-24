@@ -4,9 +4,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type Cliente } from "../../types/Cliente";
+import { clientesMocks } from "../../mocks/clientes";
 import ModalCliente from "../../components/Modais/ModalCliente";
 import Dashboard from "../../layouts/Dashboard";
 import Card from "../../components/Card";
+import { limparNumero } from "../../utils/moneyFormat";
 import "./styles.css"
 
 export default function Home() {
@@ -56,116 +58,28 @@ export default function Home() {
     <main>
       <Dashboard nameUser={userName}>
         <div className="container mt-3">
-          <p><b>16</b> clientes encontrados:</p>
+          <p><b>{clientesMocks.length}</b> clientes encontrados:</p>
         </div>
         <div className="container grid">
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-           <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-           <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-           <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-           <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
-
-          <Card
-            nome="Eduardo"
-            salario={3500}
-            empresa={120000}
-            onAdd={handleAdd}
-            onEdit={abrirEdicao}
-            onDelete={handleDelete}
-          />
+          {
+            clientesMocks.map(({ nome, salario, valorEmpresa}, key) => {
+              return (
+                <Card
+                  key={key}
+                  nome={nome}
+                  salario={salario}
+                  empresa={valorEmpresa}
+                  onAdd={handleAdd}
+                  onEdit={() => abrirEdicao({
+                    nome: nome,
+                    salario: limparNumero(`${salario}`),
+                    valorEmpresa:  limparNumero(`${valorEmpresa}`)
+                  })}
+                  onDelete={handleDelete}
+                />
+              )
+            })
+          }
         </div>
 
         <div className="container d-grid mb-5">
