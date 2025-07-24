@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useEffect, useState } from 'react';
 import type { ModalClienteProps } from '../../../types/Cliente';
 import { formatarParaReal, limparNumero } from '../../../utils/moneyFormat';
+import formatarParaMoedaReal from '../../../utils/formatarValorReal';
 
 const ModalCliente: React.FC<ModalClienteProps> = ({
   show,
@@ -16,15 +18,14 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
   const MoneyChange = (e: React.ChangeEvent<HTMLInputElement>, typeSalario:boolean) => {
     const valorDigitado = e.target.value;
     const numeroLimpo = limparNumero(valorDigitado);
-    
-    typeSalario ? setSalario(numeroLimpo) : setValorEmpresa(numeroLimpo)
+    typeSalario ? setSalario(formatarParaReal(numeroLimpo)) : setValorEmpresa(formatarParaReal(numeroLimpo))
   };
 
   useEffect(() => {
     if (clienteEditando) {
       setNome(clienteEditando.nome);
-      setSalario(clienteEditando.salario);
-      setValorEmpresa(clienteEditando.valorEmpresa);
+      setSalario(formatarParaMoedaReal(clienteEditando.salario))
+      setValorEmpresa(formatarParaMoedaReal(clienteEditando.valorEmpresa))
     } else {
       setNome('');
       setSalario('');
@@ -60,7 +61,9 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
 
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
+              <label htmlFor="nome">Nome:</label>
               <input
+                name='nome'
                 type="text"
                 className="form-control mb-3"
                 placeholder="Digite o nome:"
@@ -68,19 +71,25 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
                 onChange={(e) => setNome(e.target.value)}
                 required
               />
+
+              <label htmlFor="salario">Salário:</label>
               <input
+                name='salario'
                 type="text"
                 className="form-control mb-3"
                 placeholder="Digite o salário:"
-                value={formatarParaReal(salario)}
+                 value={salario}
                 onChange={(e) => MoneyChange(e, true)}
                 required
               />
+
+              <label htmlFor="">Valor da empresa:</label>
               <input
+                name='valorEmpresa'
                 type="text"
                 className="form-control"
                 placeholder="Digite o valor da empresa:"
-                value={formatarParaReal(valorEmpresa)}
+                value={valorEmpresa}
                 onChange={(e) => MoneyChange(e, false)}
                 required
               />

@@ -1,7 +1,7 @@
 export interface Cliente {
   nome: string;
-  salario: string;
-  valorEmpresa: string;
+  salario: string | number;
+  valorEmpresa: string | number;
 }
 
 export interface ModalClienteProps {
