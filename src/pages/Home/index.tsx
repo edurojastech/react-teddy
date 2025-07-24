@@ -12,6 +12,7 @@ import ModalDelete from "../../components/Modais/ModalDelete";
 import Dashboard from "../../layouts/Dashboard";
 import "./styles.css";
 import Pagination from "../../components/Pagination";
+import Loader from "../../components/Loader";
 
 export default function Home() {
   const [userName, setUserName] = useState(localStorage.getItem("UserName"));
@@ -23,6 +24,7 @@ export default function Home() {
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null);
   const [clienteRemove, setClienteRemove] = useState<ClienteRemove | null>(null);
+  const [hideLoader, setHideLoader] = useState(false)
 
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 4;
@@ -37,13 +39,13 @@ export default function Home() {
     setMostrarModal(true);
   }
 
-  const abrirDelete = (cliente: ClienteRemove) => { 
+  const abrirDelete = (cliente: ClienteRemove) => {
     setClienteRemove(cliente)
   }
 
   const handleSelect = () => alert('selecionar cliente!')
 
-  const handleSubmit =  async (novoCliente: Cliente) => {
+  const handleSubmit = async (novoCliente: Cliente) => {
     if (clienteEditando) {
       setCliente((prev) =>
         prev.map((c) =>
@@ -53,10 +55,10 @@ export default function Home() {
     } else {
       setCliente((prev) => [...prev, novoCliente]);
       await postClient(novoCliente).then((resp) => {
-        if(resp) {
+        if (resp) {
           alert('Cliente cadastrado com Sucesso!')
-          setMostrarModal(false)
           listarClientes()
+          setMostrarModal(false)
           setCurrentPage(1)
         }
       })
@@ -65,17 +67,20 @@ export default function Home() {
   }
 
   const listarClientes = (page = 1, limite = 12) => {
-    getClients(page, limite).then(resp => setClientesList(resp.clients))
+    getClients(page, limite).then(resp => {
+      setHideLoader(false) 
+      setClientesList(resp.clients)
+    })
   }
 
   const deletarCliente = async () => {
-    deleteClient(clienteRemove?.id).then((resp)=> {
-      if(resp == 200){
+    deleteClient(clienteRemove?.id).then((resp) => {
+      if (resp == 200) {
         alert('Cliente removido com Sucesso!')
         setMostrarModalDelete(false)
         listarClientes()
         setCurrentPage(1)
-      }else{
+      } else {
         alert("Erro ao deletar, tente novamente!")
       }
     })
@@ -83,61 +88,72 @@ export default function Home() {
 
   useEffect(() => {
     userName == null && navigate("/");
+    setHideLoader(true)
     listarClientes()
   }, [userName])
 
-  useEffect(()=> {
+  useEffect(() => {
     listarClientes(currentPage)
   }, [currentPage])
 
   return (
     <main>
       <Dashboard nameUser={userName}>
-        <div className="container mt-3">
-          <p><b>{clientesList.length}</b> clientes encontrados:</p>
-        </div>
-        <div className="container grid mb-2">
-          {
-            clientesList?.map(({ name, salary, companyValuation, id}, key) => {
-              return (
-                <Card
-                  key={key}
-                  nome={name}
-                  salario={salary}
-                  empresa={companyValuation}
-                  onAdd={handleSelect}
-                  onEdit={() => abrirEdicao({
-                    name: name,
-                    salary: limparNumero(`${salary}`),
-                    companyValuation:  limparNumero(`${companyValuation}`),
-                    id: id
-                  })}
-                  onDelete={()=> {
-                    setMostrarModalDelete(true)
-                    abrirDelete({
-                      name: name,
-                      id: id,
-                    })
-                  }}
+
+        {hideLoader && <Loader />}
+
+        {
+          !hideLoader && (
+            <>
+              <div className="container mt-3">
+                <p><b>{clientesList.length}</b> clientes encontrados:</p>
+              </div>
+
+              <div className="container grid mb-2">
+                {
+                  clientesList?.map(({ name, salary, companyValuation, id }, key) => {
+                    return (
+                      <Card
+                        key={key}
+                        nome={name}
+                        salario={salary}
+                        empresa={companyValuation}
+                        onAdd={handleSelect}
+                        onEdit={() => abrirEdicao({
+                          name: name,
+                          salary: limparNumero(`${salary}`),
+                          companyValuation: limparNumero(`${companyValuation}`),
+                          id: id
+                        })}
+                        onDelete={() => {
+                          setMostrarModalDelete(true)
+                          abrirDelete({
+                            name: name,
+                            id: id,
+                          })
+                        }}
+                      />
+                    )
+                  })
+                }
+              </div>
+
+              <div className="container d-grid mb-3">
+                <button className="btn btn-outline-primary btn-block" onClick={abrirCadastro}>
+                  Criar cliente
+                </button>
+              </div>
+
+              <div className="container mb-5">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
                 />
-              )
-            })
-          }
-        </div>
-
-        <div className="container d-grid mb-3">
-          <button className="btn btn-outline-primary btn-block" onClick={abrirCadastro}>
-            Criar cliente
-          </button>
-        </div>
-
-        <div className="container mb-5">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+              </div>
+            </>
+          )
+        }
 
         <ModalCliente
           show={mostrarModal}
@@ -147,7 +163,7 @@ export default function Home() {
         />
 
         <ModalDelete
-          onClose={() => setMostrarModalDelete(false)}          
+          onClose={() => setMostrarModalDelete(false)}
           show={mostrarModalDelete}
           clienteRemover={clienteRemove}
           onDelete={deletarCliente}
