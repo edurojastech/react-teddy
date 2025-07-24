@@ -4,17 +4,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type Cliente, type ClienteRemove } from "../../types/Cliente";
-import { getClients, postClient } from "../../API/fetch";
+import { deleteClient, getClients, postClient } from "../../API/fetch";
 import { limparNumero } from "../../utils/moneyFormat";
 import Card from "../../components/Card";
 import ModalCliente from "../../components/Modais/ModalCliente";
 import ModalDelete from "../../components/Modais/ModalDelete";
 import Dashboard from "../../layouts/Dashboard";
 import "./styles.css";
+import Pagination from "../../components/Pagination";
 
 export default function Home() {
   const [userName, setUserName] = useState(localStorage.getItem("UserName"));
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [cliente, setCliente] = useState<Cliente[]>([]);
   const [clientesList, setClientesList] = useState([])
@@ -22,6 +23,9 @@ export default function Home() {
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null);
   const [clienteRemove, setClienteRemove] = useState<ClienteRemove | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 4;
 
   const abrirCadastro = () => {
     setClienteEditando(null);
@@ -31,15 +35,13 @@ export default function Home() {
   const abrirEdicao = (cliente: Cliente) => {
     setClienteEditando(cliente);
     setMostrarModal(true);
+  }
 
-    return
-  };
-
-  const abrirDelete = (cliente: ClienteRemove) => {
+  const abrirDelete = (cliente: ClienteRemove) => { 
     setClienteRemove(cliente)
   }
 
-  const handleAdd = () => alert('Adicionar clicado!')
+  const handleSelect = () => alert('selecionar cliente!')
 
   const handleSubmit =  async (novoCliente: Cliente) => {
     if (clienteEditando) {
@@ -47,7 +49,7 @@ export default function Home() {
         prev.map((c) =>
           c === clienteEditando ? novoCliente : c
         )
-      );
+      )
     } else {
       setCliente((prev) => [...prev, novoCliente]);
       await postClient(novoCliente).then((resp) => {
@@ -55,20 +57,38 @@ export default function Home() {
           alert('Cliente cadastrado com Sucesso!')
           setMostrarModal(false)
           listarClientes()
+          setCurrentPage(1)
         }
       })
     }
     setClienteEditando(null);
-  };
+  }
 
-  const listarClientes = () => {
-    getClients(1, 40).then(resp => setClientesList(resp.clients))
+  const listarClientes = (page = 1, limite = 12) => {
+    getClients(page, limite).then(resp => setClientesList(resp.clients))
+  }
+
+  const deletarCliente = async () => {
+    deleteClient(clienteRemove?.id).then((resp)=> {
+      if(resp == 200){
+        alert('Cliente removido com Sucesso!')
+        setMostrarModalDelete(false)
+        listarClientes()
+        setCurrentPage(1)
+      }else{
+        alert("Erro ao deletar, tente novamente!")
+      }
+    })
   }
 
   useEffect(() => {
     userName == null && navigate("/");
     listarClientes()
-  }, [userName]);
+  }, [userName])
+
+  useEffect(()=> {
+    listarClientes(currentPage)
+  }, [currentPage])
 
   return (
     <main>
@@ -76,7 +96,7 @@ export default function Home() {
         <div className="container mt-3">
           <p><b>{clientesList.length}</b> clientes encontrados:</p>
         </div>
-        <div className="container grid">
+        <div className="container grid mb-2">
           {
             clientesList?.map(({ name, salary, companyValuation, id}, key) => {
               return (
@@ -85,7 +105,7 @@ export default function Home() {
                   nome={name}
                   salario={salary}
                   empresa={companyValuation}
-                  onAdd={handleAdd}
+                  onAdd={handleSelect}
                   onEdit={() => abrirEdicao({
                     name: name,
                     salary: limparNumero(`${salary}`),
@@ -105,10 +125,18 @@ export default function Home() {
           }
         </div>
 
-        <div className="container d-grid mb-5">
+        <div className="container d-grid mb-3">
           <button className="btn btn-outline-primary btn-block" onClick={abrirCadastro}>
             Criar cliente
           </button>
+        </div>
+
+        <div className="container mb-5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
 
         <ModalCliente
@@ -122,7 +150,7 @@ export default function Home() {
           onClose={() => setMostrarModalDelete(false)}          
           show={mostrarModalDelete}
           clienteRemover={clienteRemove}
-          // onDelete={}
+          onDelete={deletarCliente}
         />
       </Dashboard>
     </main>

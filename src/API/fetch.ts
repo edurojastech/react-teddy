@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { Cliente } from "../types/Cliente";
-
 const UrlAPI = "https://boasorte.teddybackoffice.com.br"
 
 export async function postClient (data: Cliente) {
@@ -24,4 +23,14 @@ export async function getClients (page: number, limit: number) {
     },
   })
   return await response.json();
+}
+
+export async function deleteClient (id: string) {
+  const response = await fetch(`${UrlAPI}/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      "accept": "*/*",
+    },
+  })
+  return response.status;
 }

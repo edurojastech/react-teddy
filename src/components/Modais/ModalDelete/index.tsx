@@ -17,14 +17,9 @@ const ModalDelete: React.FC<ModalClienteProps> = ({
       setNome(clienteRemover.name)
       setId(clienteRemover.id)
     }
-  }, [clienteRemover, show]);
+  }, [clienteRemover, show, id]);
 
-  if (!show) return null;
-  function deletar () {
-    alert(id)
-    onClose()
-  }
-
+  if (!show) return null
   return (
     <div
       className="modal show d-block"
@@ -45,10 +40,10 @@ const ModalDelete: React.FC<ModalClienteProps> = ({
           </div>
           <div className="modal-footer">
             <button
-              type="submit"
+              type="button"
               className="btn w-100 text-white"
               style={{ backgroundColor: '#f15a24' }}
-              onClick={deletar}
+              onClick={onDelete}
             >
               Excluir cliente
             </button>
