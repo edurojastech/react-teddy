@@ -4,18 +4,21 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type Cliente } from "../../types/Cliente";
-import { clientesMocks } from "../../mocks/clientes";
+import { getClients } from "../../API/fetch";
+import { limparNumero } from "../../utils/moneyFormat";
+import Card from "../../components/Card";
 import ModalCliente from "../../components/Modais/ModalCliente";
 import Dashboard from "../../layouts/Dashboard";
-import Card from "../../components/Card";
-import { limparNumero } from "../../utils/moneyFormat";
-import "./styles.css"
+import "./styles.css";
+
+
 
 export default function Home() {
   const [userName, setUserName] = useState(localStorage.getItem("UserName"));
   const navigate = useNavigate();
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [clientesList, setClientesList] = useState([])
   const [mostrarModal, setMostrarModal] = useState(false);
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null);
 
@@ -52,28 +55,29 @@ export default function Home() {
 
   useEffect(() => {
     userName == null && navigate("/");
+    getClients(1, 20).then(resp => setClientesList(resp.clients))
   }, [userName]);
 
   return (
     <main>
       <Dashboard nameUser={userName}>
         <div className="container mt-3">
-          <p><b>{clientesMocks.length}</b> clientes encontrados:</p>
+          <p><b>{clientesList.length}</b> clientes encontrados:</p>
         </div>
         <div className="container grid">
           {
-            clientesMocks.map(({ nome, salario, valorEmpresa}, key) => {
+            clientesList?.map(({ name, salary, companyValuation}, key) => {
               return (
                 <Card
                   key={key}
-                  nome={nome}
-                  salario={salario}
-                  empresa={valorEmpresa}
+                  nome={name}
+                  salario={salary}
+                  empresa={companyValuation}
                   onAdd={handleAdd}
                   onEdit={() => abrirEdicao({
-                    nome: nome,
-                    salario: limparNumero(`${salario}`),
-                    valorEmpresa:  limparNumero(`${valorEmpresa}`)
+                    nome: name,
+                    salario: limparNumero(`${salary}`),
+                    valorEmpresa:  limparNumero(`${companyValuation}`)
                   })}
                   onDelete={handleDelete}
                 />
