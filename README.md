@@ -1,69 +1,58 @@
-# React + TypeScript + Vite
+# 🧪 Teste Técnico Front-End - Teddy (Pleno)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto foi desenvolvido como parte do processo seletivo para a vaga de Desenvolvedor Front-End Pleno na Teddy.
 
-Currently, two official plugins are available:
+## 📋 Descrição do Projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A aplicação tem como objetivo gerenciar clientes. O usuário insere seu nome na tela inicial e é redirecionado para uma tela onde pode visualizar todos os clientes cadastrados, cadastrar novos e deletar registros existentes.
 
-## Expanding the ESLint configuration
+> ⚠️ Funcionalidades pendentes: edição de cliente e listagem dos clientes selecionados.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✅ Requisitos Atendidos
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- [x] Utilização de **TypeScript**
+- [x] Utilização de **React + Vite** (versão mais recente)
+- [x] Aplicação responsiva
+- [x] Deploy feito na **Vercel**
+- [x] Inclusão de melhorias (refatoração, organização, boas práticas)
+- [x] Criação deste **README** com instruções
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Tecnologias Utilizadas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- React.js
+- Vite
+- TypeScript
+- Bootstrap - CSS
+- Vercel (Deploy)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 📦 Funcionalidades Implementadas
+
+- ✅ Tela inicial com campo de nome
+- ✅ Listagem de todos os clientes
+- ✅ Cadastro de novos clientes
+- ✅ Exclusão de clientes
+- 🚧 Edição de cliente *(em desenvolvimento)*
+- 🚧 Seleção de cliente para exibir na tela de selecionados *(em desenvolvimento)*
+
+---
+
+## 🚀 Como Rodar o Projeto Localmente
+
+1. **Clone o repositório:**
+
+```bash
+git clone https://github.com/seu-usuario/nome-do-repo.git
+cd nome-do-repo
+
+
+npm install
+
+npm run dev
+
+
