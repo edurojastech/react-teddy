@@ -1,7 +1,3 @@
-# 🧪 Teste Técnico Front-End - Teddy (Pleno)
-
-Este projeto foi desenvolvido como parte do processo seletivo para a vaga de Desenvolvedor Front-End Pleno na Teddy.
-
 ## 📋 Descrição do Projeto
 
 A aplicação tem como objetivo gerenciar clientes. O usuário insere seu nome na tela inicial e é redirecionado para uma tela onde pode visualizar todos os clientes cadastrados, cadastrar novos e deletar registros existentes.
