@@ -4,7 +4,7 @@ import { getClients, postClient, deleteClient } from "../../API/fetch"; // ajust
 import { type Cliente, type ClienteRemove } from "../../types/Cliente";
 
 export function useClientesPage() {
-  const [userName, setUserName] = useState(localStorage.getItem("UserName"));
+  const [userName] = useState(localStorage.getItem("UserName"));
   const navigate = useNavigate();
 
   const [cliente, setCliente] = useState<Cliente[]>([]);

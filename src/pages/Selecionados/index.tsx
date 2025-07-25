@@ -8,7 +8,7 @@ import Card from "../../components/Card";
 import "./styles.css"
 
 export default function Selecionados() {
-  const [userName, setUserName] = useState(localStorage.getItem("UserName"));
+  const [userName] = useState(localStorage.getItem("UserName"));
   const navigate = useNavigate();
 
   const handleAdd = () => alert('Adicionar clicado!');

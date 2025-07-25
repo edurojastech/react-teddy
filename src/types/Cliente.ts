@@ -14,8 +14,13 @@ export interface ClienteRemove {
 export interface ModalClienteProps {
   show: boolean;
   onClose: () => void;
-  onDelete?: (id: any) => void;
-  onSubmit?: (data: Cliente) => void;
+  onSubmit: (data: Cliente) => any;
   clienteEditando?: Cliente | null; 
+}
+
+export interface ModalDeleteProps {
+  show: boolean;
+  onClose: () => void;
+  onDelete?: (id: any) => void;
   clienteRemover?: ClienteRemove | null
 }

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useEffect, useState } from 'react';
-import type { ModalClienteProps } from '../../../types/Cliente';
+import type { ModalDeleteProps } from '../../../types/Cliente';
 
-const ModalDelete: React.FC<ModalClienteProps> = ({
+const ModalDelete: React.FC<ModalDeleteProps> = ({
   show,
   onClose,
   onDelete,

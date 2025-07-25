@@ -1,10 +1,10 @@
 /* eslint-disable prefer-const */
-import React from "react";
 import { Link } from "react-router-dom";
 import TeddyLogo from "../../assets/teddy-logo.svg"
 import "./styles.css"
+import type { DashboardProps } from "../../types/DashboardProps";
 
-const Dashboard: React.FC = ({ children, nameUser }) => {
+const Dashboard: React.FC<DashboardProps> = ({ children, nameUser }) => {
   let currentPath = location.pathname
 
   return (
@@ -32,7 +32,7 @@ const Dashboard: React.FC = ({ children, nameUser }) => {
 
 
       {/* menu lateral */}
-      <div className="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel">
+      <div className="offcanvas offcanvas-start" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel">
         <div className="offcanvas-header bg-light px-4">
           <img src={TeddyLogo} alt="Teddy Open Finance"/>
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

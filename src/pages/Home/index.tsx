@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import React from "react";
 import { useClientesPage } from "./useClientePage";
 import { limparNumero } from "../../utils/moneyFormat";
 import Card from "../../components/Card";
@@ -28,7 +27,6 @@ export default function Home() {
     abrirDelete,
     handleSelect,
     handleSubmit,
-    listarClientes,
     deletarCliente,
     setCurrentPage,
     setMostrarModal,
